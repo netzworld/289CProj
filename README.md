@@ -1,5 +1,6 @@
 # 289CProj
-This project is for the 289C Programming Languages and Compilers course.
+This project is for the **Winter 2025 289C Programming Languages and Compilers** course.
+
 For database-driven applications, efficient SQL query performance is essential. Poorly optimized queries can lead to significant performance bottlenecks, and many developers, especially those without extensive database expertise, write suboptimal SQL queries that result in slow execution times, unnecessary resource consumption, and scalability issues. While database optimizers can automatically refine some queries, they do not always catch high-level inefficiencies such as missing indices, redundant subqueries, or unnecessary full-table scans. 
 
 There are many papers regarding SQL performance tuning, with previous studies focusing on cost-based query optimization (Graefe, 1993) and heuristic-based improvements (Chaudhuri, 1998). However, current approaches often require manual hands-on work, deep database expertise, or extensive profiling using EXPLAIN ANALYZE in PostgreSQL. Moreover, while tools like database advisors suggest indices or physical optimizations (Bruno and Chaudhuri, 2006), there is a gap in automated static analysis tools that provide real-time feedback on query inefficiencies before execution. 
