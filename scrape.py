@@ -1,27 +1,39 @@
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
-# GitHub API URL for search
-url = "https://api.github.com/search/repositories?q=SELECT+JOIN+language:SQL&per_page=100&page=1"
+# Load environment variables from .env file
+load_dotenv()
 
-# Send GET request to GitHub API
-response = requests.get(url)
+# Read the access token
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 
-# Check if the request was successful
+if not ACCESS_TOKEN:
+    raise ValueError("GitHub ACCESS_TOKEN is missing. Ensure it's set in your .env file.")
+
+# Set up the headers for authentication
+headers = {
+    "Authorization": f"Bearer {ACCESS_TOKEN}",
+    "Accept": "application/vnd.github.v3+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+}
+
+# GitHub API URL to search for repositories containing SQL queries
+url = "https://api.github.com/search/repositories?q=SELECT+language:SQL&per_page=100&page=1"
+
+# Make the request
+response = requests.get(url, headers=headers)
+
 if response.status_code == 200:
     data = response.json()
-    ssh_urls = []
+    ssh_urls = [item['ssh_url'] for item in data.get('items', [])]
 
-    # Extract ssh_url from each item in the response
-    for item in data['items']:
-        repo_url = item['ssh_url']
-        ssh_urls.append(repo_url)
+    # Write SSH URLs to a file
+    with open("ssh_urls.txt", "w") as file:
+        file.writelines(f"{url}\n" for url in ssh_urls)
 
-    # Write the ssh_urls to a file
-    with open('ssh_urls.txt', 'w') as file:
-        for url in ssh_urls:
-            file.write(url + '\n')
-
-    print("SSH URLs have been written to ssh_urls.txt")
+    print(f"SSH URLs saved to ssh_urls.txt ({len(ssh_urls)} repositories found).")
 else:
     print(f"Failed to fetch data from GitHub API. Status code: {response.status_code}")
+    print("Response:", response.json())
