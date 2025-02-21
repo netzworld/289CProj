@@ -25,7 +25,7 @@ response = requests.get(url, headers=headers)
 
 if response.status_code == 200:
     data = response.json()
-    ssh_urls = [item["ssh_url"] for item in data.get("items", [])]
+    ssh_urls = [item["clone_url"] for item in data.get("items", [])]
 
     # Create directories for cloning and storing SQL files
     os.makedirs("cloned_repos", exist_ok=True)
